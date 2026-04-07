@@ -6,3 +6,4 @@ openclaw/
 .env
 *.bun-build
 *.exe
+freecode.cmd

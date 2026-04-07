@@ -430,6 +430,22 @@ function buildFetch(
       )
     }
 
-    return inner(input, { ...init, headers, body })
+    const start = Date.now()
+    try {
+      const response = await inner(input, { ...init, headers, body })
+      const duration = Date.now() - start
+      if (duration > 10000) {
+        logForDebugging(
+          `[API PERFORMANCE] Request to ${new URL(url).pathname} took ${duration}ms`,
+        )
+      }
+      return response
+    } catch (e) {
+      const duration = Date.now() - start
+      logForDebugging(
+        `[API ERROR] Request to ${new URL(url).pathname} failed after ${duration}ms: ${e instanceof Error ? e.message : String(e)}`,
+      )
+      throw e
+    }
   }
 }

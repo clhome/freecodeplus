@@ -200,8 +200,11 @@ export function SpinnerAnimationRow({
   const thinkingShimmerColor = toRGBColor(interpolateColor(THINKING_INACTIVE, THINKING_INACTIVE_SHIMMER, thinkingOpacity));
 
   // === Build status parts ===
+  const stallHint = isStalled ? (totalTokens === 0 ? "waiting for first token..." : "stream paused...") : null;
   const parts = [...(spinnerSuffix ? [<Text dimColor key="suffix">
             {spinnerSuffix}
+          </Text>] : []), ...(stallHint ? [<Text color="error" key="stallHint">
+            {stallHint}
           </Text>] : []), ...(showTimer ? [<Text dimColor key="elapsedTime">
             {timerText}
           </Text>] : []), ...(showTokens ? [<Box flexDirection="row" key="tokens">

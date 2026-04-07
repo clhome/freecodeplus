@@ -204,8 +204,17 @@ export function formatAPIError(error: APIError): string {
   if (connectionDetails) {
     const { code, isSSLError } = connectionDetails
 
-    // Handle timeout errors
-    if (code === 'ETIMEDOUT') {
+    // Handle common network errors
+    if (code === 'ENOTFOUND' || code === 'EAI_AGAIN') {
+      return `Unable to connect to API: DNS resolution failed (address not found). Check your internet connection or proxy settings.`
+    }
+    if (code === 'ECONNREFUSED') {
+      return `Unable to connect to API: Connection refused. This often happens if a proxy is misconfigured or the API endpoint is blocked.`
+    }
+    if (code === 'ECONNRESET') {
+      return `Unable to connect to API: Connection reset by peer. Check your internet connection, proxy, or VPN.`
+    }
+    if (code === 'ETIMEDOUT' || code === 'SOCKET_TIMEOUT') {
       return 'Request timed out. Check your internet connection and proxy settings'
     }
 
@@ -237,7 +246,7 @@ export function formatAPIError(error: APIError): string {
   if (error.message === 'Connection error.') {
     // If we have a code but it's not SSL, include it for debugging
     if (connectionDetails?.code) {
-      return `Unable to connect to API (${connectionDetails.code})`
+      return `Unable to connect to API (${connectionDetails.code}). Check your internet connection.`
     }
     return 'Unable to connect to API. Check your internet connection'
   }

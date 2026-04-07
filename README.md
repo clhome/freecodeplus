@@ -82,21 +82,21 @@ free-code supports **five API providers** out of the box. Set the corresponding 
 
 Use Anthropic's first-party API directly.
 
-| Model | ID |
-|---|---|
-| Claude Opus 4.6 | `claude-opus-4-6` |
+| Model             | ID                  |
+| ----------------- | ------------------- |
+| Claude Opus 4.6   | `claude-opus-4-6`   |
 | Claude Sonnet 4.6 | `claude-sonnet-4-6` |
-| Claude Haiku 4.5 | `claude-haiku-4-5` |
+| Claude Haiku 4.5  | `claude-haiku-4-5`  |
 
 ### OpenAI Codex
 
 Use OpenAI's Codex models for code generation. Requires a Codex subscription.
 
-| Model | ID |
-|---|---|
+| Model                       | ID              |
+| --------------------------- | --------------- |
 | GPT-5.3 Codex (recommended) | `gpt-5.3-codex` |
-| GPT-5.4 | `gpt-5.4` |
-| GPT-5.4 Mini | `gpt-5.4-mini` |
+| GPT-5.4                     | `gpt-5.4`       |
+| GPT-5.4 Mini                | `gpt-5.4-mini`  |
 
 ```bash
 export CLAUDE_CODE_USE_OPENAI=1
@@ -115,13 +115,13 @@ free-code
 
 Uses your standard AWS credentials (environment variables, `~/.aws/config`, or IAM role). Models are mapped to Bedrock ARN format automatically (e.g., `us.anthropic.claude-opus-4-6-v1`).
 
-| Variable | Purpose |
-|---|---|
-| `CLAUDE_CODE_USE_BEDROCK` | Enable Bedrock provider |
-| `AWS_REGION` / `AWS_DEFAULT_REGION` | AWS region (default: `us-east-1`) |
-| `ANTHROPIC_BEDROCK_BASE_URL` | Custom Bedrock endpoint |
-| `AWS_BEARER_TOKEN_BEDROCK` | Bearer token auth |
-| `CLAUDE_CODE_SKIP_BEDROCK_AUTH` | Skip auth (testing) |
+| Variable                            | Purpose                          |
+| ----------------------------------- | -------------------------------- |
+| `CLAUDE_CODE_USE_BEDROCK`           | Enable Bedrock provider          |
+| `AWS_REGION` / `AWS_DEFAULT_REGION` | AWS region (default:`us-east-1`) |
+| `ANTHROPIC_BEDROCK_BASE_URL`        | Custom Bedrock endpoint          |
+| `AWS_BEARER_TOKEN_BEDROCK`          | Bearer token auth                |
+| `CLAUDE_CODE_SKIP_BEDROCK_AUTH`     | Skip auth (testing)              |
 
 ### Google Cloud Vertex AI
 
@@ -148,13 +148,13 @@ Supports custom deployment IDs as model names.
 
 ### Provider Selection Summary
 
-| Provider | Env Variable | Auth Method |
-|---|---|---|
-| Anthropic (default) | -- | `ANTHROPIC_API_KEY` or OAuth |
-| OpenAI Codex | `CLAUDE_CODE_USE_OPENAI=1` | OAuth via OpenAI |
-| AWS Bedrock | `CLAUDE_CODE_USE_BEDROCK=1` | AWS credentials |
-| Google Vertex AI | `CLAUDE_CODE_USE_VERTEX=1` | `gcloud` ADC |
-| Anthropic Foundry | `CLAUDE_CODE_USE_FOUNDRY=1` | `ANTHROPIC_FOUNDRY_API_KEY` |
+| Provider            | Env Variable                | Auth Method                  |
+| ------------------- | --------------------------- | ---------------------------- |
+| Anthropic (default) | --                          | `ANTHROPIC_API_KEY` or OAuth |
+| OpenAI Codex        | `CLAUDE_CODE_USE_OPENAI=1`  | OAuth via OpenAI             |
+| AWS Bedrock         | `CLAUDE_CODE_USE_BEDROCK=1` | AWS credentials              |
+| Google Vertex AI    | `CLAUDE_CODE_USE_VERTEX=1`  | `gcloud` ADC                 |
+| Anthropic Foundry   | `CLAUDE_CODE_USE_FOUNDRY=1` | `ANTHROPIC_FOUNDRY_API_KEY`  |
 
 ---
 
@@ -182,12 +182,12 @@ bun build
 
 ### Build Variants
 
-| Command | Output | Features | Description |
-|---|---|---|---|
-| `bun run build` | `./cli` | `VOICE_MODE` only | Production-like binary |
-| `bun run build:dev` | `./cli-dev` | `VOICE_MODE` only | Dev version stamp |
-| `bun run build:dev:full` | `./cli-dev` | All 54 experimental flags | Full unlock build |
-| `bun run compile` | `./dist/cli` | `VOICE_MODE` only | Alternative output path |
+| Command                  | Output       | Features                  | Description             |
+| ------------------------ | ------------ | ------------------------- | ----------------------- |
+| `bun run build`          | `./cli`      | `VOICE_MODE` only         | Production-like binary  |
+| `bun run build:dev`      | `./cli-dev`  | `VOICE_MODE` only         | Dev version stamp       |
+| `bun run build:dev:full` | `./cli-dev`  | All 54 experimental flags | Full unlock build       |
+| `bun run compile`        | `./dist/cli` | `VOICE_MODE` only         | Alternative output path |
 
 ### Custom Feature Flags
 
@@ -224,16 +224,16 @@ bun run dev
 
 ### Environment Variables Reference
 
-| Variable | Purpose |
-|---|---|
-| `ANTHROPIC_API_KEY` | Anthropic API key |
-| `ANTHROPIC_AUTH_TOKEN` | Auth token (alternative) |
-| `ANTHROPIC_MODEL` | Override default model |
-| `ANTHROPIC_BASE_URL` | Custom API endpoint |
-| `ANTHROPIC_DEFAULT_OPUS_MODEL` | Custom Opus model ID |
-| `ANTHROPIC_DEFAULT_SONNET_MODEL` | Custom Sonnet model ID |
-| `ANTHROPIC_DEFAULT_HAIKU_MODEL` | Custom Haiku model ID |
-| `CLAUDE_CODE_OAUTH_TOKEN` | OAuth token via env |
+| Variable                            | Purpose                  |
+| ----------------------------------- | ------------------------ |
+| `ANTHROPIC_API_KEY`                 | Anthropic API key        |
+| `ANTHROPIC_AUTH_TOKEN`              | Auth token (alternative) |
+| `ANTHROPIC_MODEL`                   | Override default model   |
+| `ANTHROPIC_BASE_URL`                | Custom API endpoint      |
+| `ANTHROPIC_DEFAULT_OPUS_MODEL`      | Custom Opus model ID     |
+| `ANTHROPIC_DEFAULT_SONNET_MODEL`    | Custom Sonnet model ID   |
+| `ANTHROPIC_DEFAULT_HAIKU_MODEL`     | Custom Haiku model ID    |
+| `CLAUDE_CODE_OAUTH_TOKEN`           | OAuth token via env      |
 | `CLAUDE_CODE_API_KEY_HELPER_TTL_MS` | API key helper cache TTL |
 
 ---
@@ -244,36 +244,36 @@ The `bun run build:dev:full` build enables all 54 working feature flags. Highlig
 
 ### Interaction & UI
 
-| Flag | Description |
-|---|---|
-| `ULTRAPLAN` | Remote multi-agent planning on Claude Code web (Opus-class) |
-| `ULTRATHINK` | Deep thinking mode -- type "ultrathink" to boost reasoning effort |
-| `VOICE_MODE` | Push-to-talk voice input and dictation |
-| `TOKEN_BUDGET` | Token budget tracking and usage warnings |
-| `HISTORY_PICKER` | Interactive prompt history picker |
-| `MESSAGE_ACTIONS` | Message action entrypoints in the UI |
-| `QUICK_SEARCH` | Prompt quick-search |
-| `SHOT_STATS` | Shot-distribution stats |
+| Flag              | Description                                                       |
+| ----------------- | ----------------------------------------------------------------- |
+| `ULTRAPLAN`       | Remote multi-agent planning on Claude Code web (Opus-class)       |
+| `ULTRATHINK`      | Deep thinking mode -- type "ultrathink" to boost reasoning effort |
+| `VOICE_MODE`      | Push-to-talk voice input and dictation                            |
+| `TOKEN_BUDGET`    | Token budget tracking and usage warnings                          |
+| `HISTORY_PICKER`  | Interactive prompt history picker                                 |
+| `MESSAGE_ACTIONS` | Message action entrypoints in the UI                              |
+| `QUICK_SEARCH`    | Prompt quick-search                                               |
+| `SHOT_STATS`      | Shot-distribution stats                                           |
 
 ### Agents, Memory & Planning
 
-| Flag | Description |
-|---|---|
-| `BUILTIN_EXPLORE_PLAN_AGENTS` | Built-in explore/plan agent presets |
-| `VERIFICATION_AGENT` | Verification agent for task validation |
-| `AGENT_TRIGGERS` | Local cron/trigger tools for background automation |
-| `AGENT_TRIGGERS_REMOTE` | Remote trigger tool path |
-| `EXTRACT_MEMORIES` | Post-query automatic memory extraction |
-| `COMPACTION_REMINDERS` | Smart reminders around context compaction |
-| `CACHED_MICROCOMPACT` | Cached microcompact state through query flows |
-| `TEAMMEM` | Team-memory files and watcher hooks |
+| Flag                          | Description                                        |
+| ----------------------------- | -------------------------------------------------- |
+| `BUILTIN_EXPLORE_PLAN_AGENTS` | Built-in explore/plan agent presets                |
+| `VERIFICATION_AGENT`          | Verification agent for task validation             |
+| `AGENT_TRIGGERS`              | Local cron/trigger tools for background automation |
+| `AGENT_TRIGGERS_REMOTE`       | Remote trigger tool path                           |
+| `EXTRACT_MEMORIES`            | Post-query automatic memory extraction             |
+| `COMPACTION_REMINDERS`        | Smart reminders around context compaction          |
+| `CACHED_MICROCOMPACT`         | Cached microcompact state through query flows      |
+| `TEAMMEM`                     | Team-memory files and watcher hooks                |
 
 ### Tools & Infrastructure
 
-| Flag | Description |
-|---|---|
-| `BRIDGE_MODE` | IDE remote-control bridge (VS Code, JetBrains) |
-| `BASH_CLASSIFIER` | Classifier-assisted bash permission decisions |
+| Flag                           | Description                                    |
+| ------------------------------ | ---------------------------------------------- |
+| `BRIDGE_MODE`                  | IDE remote-control bridge (VS Code, JetBrains) |
+| `BASH_CLASSIFIER`              | Classifier-assisted bash permission decisions  |
 | `PROMPT_CACHE_BREAK_DETECTION` | Cache-break detection in compaction/query flow |
 
 See [FEATURES.md](FEATURES.md) for the complete audit of all 88 flags, including 34 broken flags with reconstruction notes.
@@ -314,16 +314,16 @@ src/
 
 ## Tech Stack
 
-| | |
-|---|---|
-| **Runtime** | [Bun](https://bun.sh) |
-| **Language** | TypeScript |
-| **Terminal UI** | React + [Ink](https://github.com/vadimdemedes/ink) |
-| **CLI Parsing** | [Commander.js](https://github.com/tj/commander.js) |
-| **Schema Validation** | Zod v4 |
-| **Code Search** | ripgrep (bundled) |
-| **Protocols** | MCP, LSP |
-| **APIs** | Anthropic Messages, OpenAI Codex, AWS Bedrock, Google Vertex AI |
+|                       |                                                                 |
+| --------------------- | --------------------------------------------------------------- |
+| **Runtime**           | [Bun](https://bun.sh)                                           |
+| **Language**          | TypeScript                                                      |
+| **Terminal UI**       | React +[Ink](https://github.com/vadimdemedes/ink)               |
+| **CLI Parsing**       | [Commander.js](https://github.com/tj/commander.js)              |
+| **Schema Validation** | Zod v4                                                          |
+| **Code Search**       | ripgrep (bundled)                                               |
+| **Protocols**         | MCP, LSP                                                        |
+| **APIs**              | Anthropic Messages, OpenAI Codex, AWS Bedrock, Google Vertex AI |
 
 ---
 
@@ -331,9 +331,9 @@ src/
 
 A full copy of this repository is permanently pinned on IPFS via Filecoin:
 
-| | |
-|---|---|
-| **CID** | `bafybeiegvef3dt24n2znnnmzcud2vxat7y7rl5ikz7y7yoglxappim54bm` |
+|             |                                                                                   |
+| ----------- | --------------------------------------------------------------------------------- |
+| **CID**     | `bafybeiegvef3dt24n2znnnmzcud2vxat7y7rl5ikz7y7yoglxappim54bm`                     |
 | **Gateway** | https://w3s.link/ipfs/bafybeiegvef3dt24n2znnnmzcud2vxat7y7rl5ikz7y7yoglxappim54bm |
 
 If this repo gets taken down, the code lives on.
@@ -364,29 +364,29 @@ This guide explains how to configure and use `free-code` in a Windows environmen
 
 ### 1. Basic Environment Setup
 
-1.  **Install Bun (Windows Native Version)**:
-    Run the following in PowerShell:
+1. **Install Bun (Windows Native Version)**:
+   Run the following in PowerShell:
 
-    ```powershell
-    powershell -c "irm bun.sh/install.ps1 | iex"
-    ```
+   ```powershell
+   powershell -c "irm bun.sh/install.ps1 | iex"
+   ```
 
-2.  **Install Dependencies and Compile**:
-    Run the following in the project root directory:
+2. **Install Dependencies and Compile**:
+   Run the following in the project root directory:
 
-    ```powershell
-    bun install
-    bun run build:dev:full
-    ```
+   ```powershell
+   bun install
+   bun run build:dev:full
+   ```
 
-    After compilation, `cli-dev.exe` will be generated.
+   After compilation, `cli-dev.exe` will be generated.
 
 ### 2. Configuration and Running
 
 #### Option A: Direct Connection to Anthropic Official or Compatible Interfaces
 
-1.  Set API Key: `$env:ANTHROPIC_API_KEY="your-key"`
-2.  Run: `./cli-dev.exe`
+1. Set API Key: `$env:ANTHROPIC_API_KEY="your-key"`
+2. Run: `./cli-dev.exe`
 
 #### Option B: Connection to General OpenAI-formatted Interfaces (No Proxy Mode)
 
@@ -413,7 +413,19 @@ $env:ANTHROPIC_MODEL="gemini-2.5-flash"
 
 ### 3. Important Notes
 
--   **Regional Restrictions**: The system has removed the mandatory network pre-check for `api.anthropic.com`, allowing you to start it in any network environment.
--   **Custom Models**: If you are using a non-Claude model, be sure to specify the `ANTHROPIC_MODEL` environment variable.
--   **Recompilation**: If you modify the source code, make sure to re-run `bun run build:dev:full` to generate the latest `.exe` file.
+- **Regional Restrictions**: The system has removed the mandatory network pre-check for `api.anthropic.com`, allowing you to start it in any network environment.
+- **Custom Models**: If you are using a non-Claude model, be sure to specify the `ANTHROPIC_MODEL` environment variable.
+- **Recompilation**: If you modify the source code, make sure to re-run `bun run build:dev:full` to generate the latest `.exe` file.
 
+### 4.makefile freecode.cmd
+
+You can launch the conversation by running `freecode` from any directory in the command line.
+
+```
+@echo off
+set "CLAUDE_CODE_USE_OPENAI_COMPAT=1"
+set "ANTHROPIC_BASE_URL=https://xxx.com/v1"
+set "ANTHROPIC_API_KEY=AIzaSxsds45xxxxxx64KUwOb09KPc8"
+set "ANTHROPIC_MODEL=gemini-2.5-flash"
+"C:\freecode\cli-dev.exe" %*
+```

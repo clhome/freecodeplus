@@ -2793,16 +2793,34 @@ export function REPL({
     resetTurnHookDuration();
     resetTurnToolDuration();
     resetTurnClassifierDuration();
-    for await (const event of query({
-      messages: messagesIncludingNewMessages,
-      systemPrompt,
-      userContext,
-      systemContext,
-      canUseTool,
-      toolUseContext,
-      querySource: getQuerySourceForREPL()
-    })) {
-      onQueryEvent(event);
+
+    let receivedAnyEvent = false;
+    const hangTimeout = setTimeout(() => {
+      if (!receivedAnyEvent) {
+        addNotification({
+          key: 'api-hang-warning',
+          text: 'Still waiting for API response... The request is taking longer than usual. This might be a network issue.',
+          priority: 'high'
+        });
+      }
+    }, 45000); // 45 seconds of total silence
+
+    try {
+      for await (const event of query({
+        messages: messagesIncludingNewMessages,
+        systemPrompt,
+        userContext,
+        systemContext,
+        canUseTool,
+        toolUseContext,
+        querySource: getQuerySourceForREPL()
+      })) {
+        receivedAnyEvent = true;
+        clearTimeout(hangTimeout);
+        onQueryEvent(event);
+      }
+    } finally {
+      clearTimeout(hangTimeout);
     }
     if (feature('BUDDY')) {
       void fireCompanionObserver(messagesRef.current, reaction => setAppState(prev => prev.companionReaction === reaction ? prev : {
