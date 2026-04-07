@@ -3,3 +3,6 @@ dist/
 cli
 cli-dev
 openclaw/
+.env
+*.bun-build
+*.exe
