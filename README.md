@@ -1,8 +1,7 @@
 <p align="center">
   <img src="assets/screenshot.png" alt="free-code" width="720" />
 </p>
-
-<h1 align="center">free-code</h1>
+<h1 align="center">freecodeplus</h1>
 
 <p align="center">
   <strong>The free build of Claude Code.</strong><br>
@@ -12,9 +11,9 @@
 
 <p align="center">
   <a href="#quick-install"><img src="https://img.shields.io/badge/install-one--liner-blue?style=flat-square" alt="Install" /></a>
-  <a href="https://github.com/paoloanzn/free-code/stargazers"><img src="https://img.shields.io/github/stars/paoloanzn/free-code?style=flat-square" alt="Stars" /></a>
-  <a href="https://github.com/paoloanzn/free-code/issues"><img src="https://img.shields.io/github/issues/paoloanzn/free-code?style=flat-square" alt="Issues" /></a>
-  <a href="https://github.com/paoloanzn/free-code/blob/main/FEATURES.md"><img src="https://img.shields.io/badge/features-88%20flags-orange?style=flat-square" alt="Feature Flags" /></a>
+  <a href="https://github.com/clhome/freecodeplus/stargazers"><img src="https://img.shields.io/github/stars/clhome/freecodeplus?style=flat-square" alt="Stars" /></a>
+  <a href="https://github.com/clhome/freecodeplus/issues"><img src="https://img.shields.io/github/issues/clhome/freecodeplus?style=flat-square" alt="Issues" /></a>
+  <a href="https://github.com/clhome/freecodeplus/blob/main/FEATURES.md"><img src="https://img.shields.io/badge/features-88%20flags-orange?style=flat-square" alt="Feature Flags" /></a>
   <a href="#ipfs-mirror"><img src="https://img.shields.io/badge/IPFS-mirrored-teal?style=flat-square" alt="IPFS" /></a>
 </p>
 
@@ -23,7 +22,7 @@
 ## Quick Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/paoloanzn/free-code/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/clhome/freecodeplus/main/install.sh | bash
 ```
 
 Checks your system, installs Bun if needed, clones the repo, builds with all experimental features enabled, and symlinks `free-code` on your PATH.
@@ -175,7 +174,7 @@ curl -fsSL https://bun.sh/install | bash
 ## Build
 
 ```bash
-git clone https://github.com/paoloanzn/free-code.git
+git clone https://github.com/clhome/freecodeplus.git
 cd free-code
 bun build
 ./cli
@@ -356,3 +355,65 @@ Contributions are welcome. If you're working on restoring one of the 34 broken f
 ## License
 
 The original Claude Code source is the property of Anthropic. This fork exists because the source was publicly exposed through their npm distribution. Use at your own discretion.
+
+---
+
+## Windows Usage Guide (including OpenAI compatibility mode)
+
+This guide explains how to configure and use `free-code` in a Windows environment, including how to directly connect to third-party OpenAI-formatted interfaces.
+
+### 1. Basic Environment Setup
+
+1.  **Install Bun (Windows Native Version)**:
+    Run the following in PowerShell:
+
+    ```powershell
+    powershell -c "irm bun.sh/install.ps1 | iex"
+    ```
+
+2.  **Install Dependencies and Compile**:
+    Run the following in the project root directory:
+
+    ```powershell
+    bun install
+    bun run build:dev:full
+    ```
+
+    After compilation, `cli-dev.exe` will be generated.
+
+### 2. Configuration and Running
+
+#### Option A: Direct Connection to Anthropic Official or Compatible Interfaces
+
+1.  Set API Key: `$env:ANTHROPIC_API_KEY="your-key"`
+2.  Run: `./cli-dev.exe`
+
+#### Option B: Connection to General OpenAI-formatted Interfaces (No Proxy Mode)
+
+The new version includes a built-in protocol conversion layer. You can directly connect to third-party interfaces like Gemini/OpenAI without using LiteLLM.
+
+**Configuration Example (PowerShell):**
+
+```powershell
+# 1. Enable built-in OpenAI compatibility mode
+$env:CLAUDE_CODE_USE_OPENAI_COMPAT="1"
+
+# 2. Set your third-party interface address (point to the /v1 directory)
+$env:ANTHROPIC_BASE_URL="https://xxx.xxx.com/v1"
+
+# 3. Set API Key
+$env:ANTHROPIC_API_KEY="AIzaSy..."
+
+# 4. Specify Model Name
+$env:ANTHROPIC_MODEL="gemini-2.5-flash"
+
+# 5. Start
+./cli-dev.exe
+```
+
+### 3. Important Notes
+
+-   **Regional Restrictions**: The system has removed the mandatory network pre-check for `api.anthropic.com`, allowing you to start it in any network environment.
+-   **Custom Models**: If you are using a non-Claude model, be sure to specify the `ANTHROPIC_MODEL` environment variable.
+-   **Recompilation**: If you modify the source code, make sure to re-run `bun run build:dev:full` to generate the latest `.exe` file.
+

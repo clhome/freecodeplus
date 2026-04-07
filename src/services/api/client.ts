@@ -36,6 +36,7 @@ import {
   isEnvTruthy,
 } from '../../utils/envUtils.js'
 import { createCodexFetch } from './codex-fetch-adapter.js'
+import { handleOpenAICompatRequest } from './openai-adapter.js'
 
 /**
  * Environment variables for different client types:
@@ -395,10 +396,10 @@ function buildFetch(
       headers.set(CLIENT_REQUEST_ID_HEADER, randomUUID())
     }
 
+    const url = input instanceof Request ? input.url : String(input)
     let body = init?.body
+
     try {
-      // eslint-disable-next-line eslint-plugin-n/no-unsupported-features/node-builtins
-      const url = input instanceof Request ? input.url : String(input)
       const id = headers.get(CLIENT_REQUEST_ID_HEADER)
       logForDebugging(
         `[API REQUEST] ${new URL(url).pathname}${id ? ` ${CLIENT_REQUEST_ID_HEADER}=${id}` : ''} source=${source ?? 'unknown'}`,
@@ -417,6 +418,18 @@ function buildFetch(
     } catch {
       // never let logging crash the fetch
     }
+
+    if (
+      isEnvTruthy(process.env.CLAUDE_CODE_USE_OPENAI_COMPAT) &&
+      url.includes('/v1/messages')
+    ) {
+      return handleOpenAICompatRequest(
+        url,
+        { ...init, headers, body } as RequestInit,
+        inner as any,
+      )
+    }
+
     return inner(input, { ...init, headers, body })
   }
 }
