@@ -398,8 +398,8 @@ The new version includes a built-in protocol conversion layer. You can directly 
 # 1. Enable built-in OpenAI compatibility mode
 $env:CLAUDE_CODE_USE_OPENAI_COMPAT="1"
 
-# 2. Set your third-party interface address (point to the /v1 directory)
-$env:ANTHROPIC_BASE_URL="https://xxx.xxx.com/v1"
+# 2. Set your third-party interface address 
+$env:ANTHROPIC_BASE_URL="https://xxx.xxx.com"
 
 # 3. Set API Key
 $env:ANTHROPIC_API_KEY="AIzaSy..."
@@ -424,7 +424,7 @@ You can launch the conversation by running `freecode` from any directory in the 
 ```
 @echo off
 set "CLAUDE_CODE_USE_OPENAI_COMPAT=1"
-set "ANTHROPIC_BASE_URL=https://xxx.com/v1"
+set "ANTHROPIC_BASE_URL=https://xxx.com"
 set "ANTHROPIC_API_KEY=AIzaSxsds45xxxxxx64KUwOb09KPc8"
 set "ANTHROPIC_MODEL=gemini-2.5-flash"
 "C:\freecode\cli-dev.exe" %*

@@ -20,6 +20,21 @@
    ```
 
    编译完成后会生成 `cli-dev.exe`。
+   
+   3 开发模式
+   
+   ```ini
+   开发模式启动: bun run dev
+   实时看日志: 加上 --debug-to-stderr 或 -D 参数
+   更详细日志: 设置环境变量 CLAUDE_CODE_DEBUG_LOG_LEVEL=verbose
+   
+   即使没有在终端输出（即不带 -D 运行），系统也会自动将日志记录在本地文件中。你可以通过以下路径查看：
+   
+   实时查看最新日志: 在另一个终端运行 Get-Content -Path "$HOME\.claude\debug\latest" -Wait (PowerShell)
+   日志保存目录: %USERPROFILE%\.claude\debug\
+   ```
+   
+   
 
 ## 2. 配置与运行
 
@@ -39,7 +54,7 @@
 $env:CLAUDE_CODE_USE_OPENAI_COMPAT="1"
 
 # 2. 设置您的第三方接口地址 (指向 /v1 目录即可)
-$env:ANTHROPIC_BASE_URL="https://xxx.xxx.com/v1"
+$env:ANTHROPIC_BASE_URL="https://xxx.xxx.com"
 
 # 3. 设置 API Key
 $env:ANTHROPIC_API_KEY="AIzaSy..."
