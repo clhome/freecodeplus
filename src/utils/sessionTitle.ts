@@ -113,7 +113,7 @@ export async function generateSessionTitle(
 
     const text = extractTextContent(result.message.content)
 
-    const parsed = titleSchema().safeParse(safeParseJSON(text))
+    const parsed = titleSchema().safeParse(safeParseJSON(text, false))
     const title = parsed.success ? parsed.data.title.trim() || null : null
 
     logEvent('tengu_session_title_generated', { success: title !== null })

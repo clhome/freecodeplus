@@ -7,3 +7,4 @@ openclaw/
 *.bun-build
 *.exe
 freecode.cmd
+qwcode.cmd
