@@ -16,9 +16,12 @@
 
    ```powershell
    bun install
+   #带日志版本
    bun run build:dev:full
+   #不带日志版本
+   bun run build:full
    ```
-
+   
    编译完成后会生成 `cli-dev.exe`。
    
    3 **开发模式**
