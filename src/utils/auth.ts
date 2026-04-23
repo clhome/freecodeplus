@@ -297,12 +297,7 @@ export function getAnthropicApiKeyWithSource(
     }
   }
   // Check for ANTHROPIC_API_KEY before checking the apiKeyHelper or /login-managed key
-  if (
-    apiKeyEnv &&
-    getGlobalConfig().customApiKeyResponses?.approved?.includes(
-      normalizeApiKeyForConfig(apiKeyEnv),
-    )
-  ) {
+  if (apiKeyEnv) {
     return {
       key: apiKeyEnv,
       source: 'ANTHROPIC_API_KEY',

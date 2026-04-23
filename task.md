@@ -17,3 +17,8 @@ FreeCodePlus 是一个基于 Bun 的 CLI 工作区，旨在提供类似 Claude C
 - [x] 修复启动报错 `Could not resolve authentication method` 和 JSON Parse error
     - [x] 修复 `.env` 文件格式，使其符合标准 dotenv 规范
     - [x] 优化 `sessionTitle.ts` 中的 `safeParseJSON` 调用，避免打印解析报错日志
+- [x] 补充 OpenAI 兼容层工具调用（Tool Calls）逆向解析
+    - [x] 在 `translateOpenAIStreamToAnthropic` 函数中增加状态追踪变量 `activeTools`
+    - [x] 完善针对 `delta?.tool_calls` 的处理，触发 `tool_use` 对应的 `content_block_start`
+    - [x] 完善针对 JSON 参数分块的处理，触发 `input_json_delta` 对应的 `content_block_delta`
+    - [x] 在流末尾发送每个 activeTool 的 `content_block_stop` 并修正 `stop_reason` 为 `tool_use`

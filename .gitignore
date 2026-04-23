@@ -8,3 +8,4 @@ openclaw/
 *.exe
 freecode.cmd
 qwcode.cmd
+.env gemini

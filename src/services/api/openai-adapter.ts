@@ -139,6 +139,15 @@ async function translateOpenAIStreamToAnthropic(
       let inputTokens = 0
       let outputTokens = 0
 
+      interface ActiveToolCall {
+        anthropicIndex: number;
+        id: string;
+        name: string;
+        argsBuffer: string;
+      }
+      const activeTools = new Map<number, ActiveToolCall>()
+      let nextContentBlockIndex = 1
+
       // Initial Message Start
       controller.enqueue(encoder.encode(formatAnthropicSSE('message_start', {
         type: 'message_start',
@@ -161,6 +170,13 @@ async function translateOpenAIStreamToAnthropic(
         content_block: { type: 'text', text: '' }
       })))
 
+      const debugLogPath = require('path').join(process.cwd(), 'claude-debug-stream.log')
+      const fs = require('fs')
+      const logDebug = (msg: string) => {
+        try { fs.appendFileSync(debugLogPath, msg + '\n') } catch (e) {}
+      }
+      logDebug(`\n--- NEW REQUEST [${messageId}] ---`)
+
       const reader = openAIResponse.body?.getReader()
       if (!reader) {
         controller.close()
@@ -181,6 +197,7 @@ async function translateOpenAIStreamToAnthropic(
           if (!trimmed || !trimmed.startsWith('data: ')) continue
           const dataStr = trimmed.slice(6)
           if (dataStr === '[DONE]') continue
+          logDebug('RECV: ' + dataStr)
 
           try {
             const chunk = JSON.parse(dataStr)
@@ -196,8 +213,49 @@ async function translateOpenAIStreamToAnthropic(
             }
 
             if (delta?.tool_calls) {
-              // Note: Complex tool call handling for streaming would go here
-              // For now we focus on basic text compatibility
+              for (const tc of delta.tool_calls) {
+                if (tc.id && tc.function?.name) {
+                  // Initialize new tool call
+                  const activeTool: ActiveToolCall = {
+                    anthropicIndex: nextContentBlockIndex++,
+                    id: tc.id,
+                    name: tc.function.name,
+                    argsBuffer: tc.function.arguments || ''
+                  }
+                  activeTools.set(tc.index, activeTool)
+
+                  controller.enqueue(encoder.encode(formatAnthropicSSE('content_block_start', {
+                    type: 'content_block_start',
+                    index: activeTool.anthropicIndex,
+                    content_block: {
+                      type: 'tool_use',
+                      id: activeTool.id,
+                      name: activeTool.name
+                    }
+                  })))
+
+                  if (activeTool.argsBuffer) {
+                    controller.enqueue(encoder.encode(formatAnthropicSSE('content_block_delta', {
+                      type: 'content_block_delta',
+                      index: activeTool.anthropicIndex,
+                      delta: { type: 'input_json_delta', partial_json: activeTool.argsBuffer }
+                    })))
+                    outputTokens++
+                  }
+                } else if (activeTools.has(tc.index)) {
+                  // Continue existing tool call
+                  const activeTool = activeTools.get(tc.index)!
+                  if (tc.function?.arguments) {
+                    activeTool.argsBuffer += tc.function.arguments
+                    controller.enqueue(encoder.encode(formatAnthropicSSE('content_block_delta', {
+                      type: 'content_block_delta',
+                      index: activeTool.anthropicIndex,
+                      delta: { type: 'input_json_delta', partial_json: tc.function.arguments }
+                    })))
+                    outputTokens++
+                  }
+                }
+              }
             }
           } catch (e) {
             // Ignore parse errors from partial chunks
@@ -205,15 +263,25 @@ async function translateOpenAIStreamToAnthropic(
         }
       }
 
-      // Close message
+      // Close text message
       controller.enqueue(encoder.encode(formatAnthropicSSE('content_block_stop', {
         type: 'content_block_stop',
         index: 0
       })))
 
+      // Close all tool blocks
+      for (const tool of activeTools.values()) {
+        controller.enqueue(encoder.encode(formatAnthropicSSE('content_block_stop', {
+          type: 'content_block_stop',
+          index: tool.anthropicIndex
+        })))
+      }
+
+      const stopReason = activeTools.size > 0 ? 'tool_use' : 'end_turn'
+
       controller.enqueue(encoder.encode(formatAnthropicSSE('message_delta', {
         type: 'message_delta',
-        delta: { stop_reason: 'end_turn', stop_sequence: null },
+        delta: { stop_reason: stopReason, stop_sequence: null },
         usage: { output_tokens: outputTokens }
       })))
 
